@@ -1,12 +1,14 @@
 import useFetch from 'react-fetch-hook'
 import { useEffect, useState } from 'react'
 import ContactCards from './ContactCards'
+import Modal from './Modal'
 
 const App = () => {
   const url = 'https://randomuser.me/api/'
   const { isLoading, data, error } = useFetch(url+'?results=200')
   const [contactList, setContactList] = useState()
   const [filterQuery, setFilterQuery] = useState()
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
       if (!filterQuery) {
@@ -31,6 +33,21 @@ const App = () => {
 
   return (
     <div className="bg-gray-100">
+
+      <section>
+        <div className="App">
+          <button
+            className="openModalBtn"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-20 mt-6 rounded"
+            onClick={() => {
+              setOpenModal(true);
+            }}>
+              Add a Person
+            </button>
+            {openModal && <Modal setOpenModal={setOpenModal}/>}
+        </div>
+      </section>
+
       <section>
         <form>
           <input
@@ -41,6 +58,7 @@ const App = () => {
           />
         </form>
       </section>
+
       <section className="p-20 grid sm:grid-cols-2 md:grid-cols-4 gap-6">
         {contactList?.length < 1 && (
           <h1>No data matches your search</h1>
